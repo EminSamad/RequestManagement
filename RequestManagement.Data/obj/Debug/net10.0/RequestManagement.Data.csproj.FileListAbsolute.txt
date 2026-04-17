@@ -1,0 +1,16 @@
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.csproj.AssemblyReference.cache
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.AssemblyInfoInputs.cache
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.AssemblyInfo.cs
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.csproj.CoreCompileInputs.cache
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.sourcelink.json
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\bin\Debug\net10.0\RequestManagement.Data.deps.json
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\bin\Debug\net10.0\RequestManagement.Data.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\bin\Debug\net10.0\RequestManagement.Data.pdb
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\bin\Debug\net10.0\RequestManagement.Core.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\bin\Debug\net10.0\RequestManagement.Core.pdb
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestM.98EA4C61.Up2Date
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\refint\RequestManagement.Data.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\RequestManagement.Data.pdb
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.Data\obj\Debug\net10.0\ref\RequestManagement.Data.dll
