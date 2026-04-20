@@ -1,6 +1,6 @@
 using RequestManagement.Core.Entities;
 
-namespace RequestManagement.Data.Repositories.Interface;
+namespace RequestManagement.Data.Repositories.Interfaces;
     public interface IUnitOfWork : IDisposable
     {
     IGenericRepository<User> Users { get; }

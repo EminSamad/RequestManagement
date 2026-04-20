@@ -1,9 +1,9 @@
 using RequestManagement.Data.Context;
-using RequestManagement.Data.Repositories.Interface;
+using RequestManagement.Data.Repositories.Interfaces;
 using RequestManagement.Core.Entities;
-using RequsestManagement.Data.Repositories.Implementations;
+using RequestManagement.Data.Repositories.Implementations;
 
-namespace RequsestManagement.Data.Repositories.Implementations;
+namespace RequestManagement.Data.Repositories.Implementations;
 
 public class UnitOfWork : IUnitOfWork
 {

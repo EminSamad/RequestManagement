@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RequestManagement.Data.Context;
+using RequestManagement.Data.Repositories.Interfaces;
+using RequestManagement.Data.Repositories.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
@@ -21,5 +25,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
-                                

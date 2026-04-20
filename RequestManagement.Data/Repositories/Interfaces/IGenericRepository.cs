@@ -1,4 +1,4 @@
-namespace RequestManagement.Data.Repositories.Interface
+namespace RequestManagement.Data.Repositories.Interfaces
 {
     public interface IGenericRepository<T> where T : class
     {

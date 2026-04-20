@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "vklxV0YtJ8M=",
+  "dgSpecHash": "xl0TAn7xqZU=",
   "success": true,
   "projectFilePath": "C:\\Users\\Emin\\Desktop\\C#Projects\\RequestManagement\\RequestManagement.Business\\RequestManagement.Business.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Emin\\.nuget\\packages\\bcrypt.net-next\\4.1.0\\bcrypt.net-next.4.1.0.nupkg.sha512"
+  ],
   "logs": []
 }
