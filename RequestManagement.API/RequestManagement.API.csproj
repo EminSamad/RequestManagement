@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RequestManagement.Data\RequestManagement.Data.csproj" />
+    <ProjectReference Include="..\RequestManagement.Business\RequestManagement.Business.csproj" />
   </ItemGroup>
 
 </Project>

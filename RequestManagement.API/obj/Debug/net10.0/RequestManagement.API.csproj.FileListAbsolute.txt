@@ -128,3 +128,14 @@ C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\obj\Deb
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\obj\Debug\net10.0\RequestManagement.API.pdb
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\obj\Debug\net10.0\RequestManagement.API.genruntimeconfig.cache
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\obj\Debug\net10.0\ref\RequestManagement.API.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\BCrypt.Net-Next.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.Business.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.Business.pdb
