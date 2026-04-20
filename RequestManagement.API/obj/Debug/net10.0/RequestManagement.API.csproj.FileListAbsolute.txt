@@ -16,7 +16,6 @@ C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Deb
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.API.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.API.pdb
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Humanizer.dll
-C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.Build.Framework.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.CodeAnalysis.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\Microsoft.CodeAnalysis.CSharp.dll
