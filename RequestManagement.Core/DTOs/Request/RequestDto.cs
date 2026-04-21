@@ -3,8 +3,8 @@ namespace RequestManagement.Core.DTOs.Request;
 public class RequestDto
 {
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public string Title { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public Priority Priority { get; set; }
     public DateTime DueDate { get; set; }
     public RequestStatus Status { get; set; }
