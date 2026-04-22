@@ -34,6 +34,15 @@ public class AppDbContext : DbContext
             .HasForeignKey(r => r.ExecutorId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Enum string conversion
+        modelBuilder.Entity<Request>()
+            .Property(r => r.Priority)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Request>()
+            .Property(r => r.Status)
+            .HasConversion<string>();
+
         // Soft delete filter
         modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
         modelBuilder.Entity<Request>().HasQueryFilter(r => !r.IsDeleted);
