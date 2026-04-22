@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Business.Interfaces;
 using RequestManagement.Core.DTOs.Request;
 using System.Security.Claims;
+using RequestManagement.API.Services;
 
 namespace RequestManagement.API.Controllers;
 
@@ -12,10 +13,12 @@ namespace RequestManagement.API.Controllers;
 public class RequestController : ControllerBase
 {
     private readonly IRequestService _requestService;
+    private readonly FileService _fileService;
 
-    public RequestController(IRequestService requestService)
+    public RequestController(IRequestService requestService, FileService fileService)
     {
         _requestService = requestService;
+        _fileService = fileService;
     }
 
     private int GetUserId() =>
@@ -36,9 +39,13 @@ public class RequestController : ControllerBase
     }
 
     [HttpPost("create")]
-    public async Task<IActionResult> Create(CreateRequestDto dto)
+    public async Task<IActionResult> Create([FromForm] CreateRequestDto dto, IFormFile? file)
     {
-        await _requestService.CreateRequestAsync(dto, GetUserId());
+        string? filePath = null;
+        if (file != null)
+            filePath = await _fileService.SaveFileAsync(file);
+
+        await _requestService.CreateRequestAsync(dto, GetUserId(), filePath);
         return Ok("Request created successfully");
     }
 

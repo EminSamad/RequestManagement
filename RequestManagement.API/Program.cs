@@ -8,6 +8,7 @@
     using RequestManagement.Business.Interfaces;
     using RequestManagement.Business.Services;
     using RequestManagement.API.Middlewares;
+    using RequestManagement.API.Services;
 
     var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +51,7 @@
     // Services
     builder.Services.AddScoped<IAuthService, AuthService>();
     builder.Services.AddScoped<IRequestService, RequestService>();  
+    builder.Services.AddScoped<FileService>();
 
     // JWT Authentication
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

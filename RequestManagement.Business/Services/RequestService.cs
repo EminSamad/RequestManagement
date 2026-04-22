@@ -58,7 +58,7 @@ public class RequestService : IRequestService
             });
     }
 
-    public async Task CreateRequestAsync(CreateRequestDto dto, int userId)
+    public async Task CreateRequestAsync(CreateRequestDto dto, int userId, string? filePath = null)
     {
         var request = new Request
         {
@@ -69,6 +69,7 @@ public class RequestService : IRequestService
             CategoryId = dto.CategoryId,
             RequesterId = userId,
             Status = RequestStatus.Initial,
+            FilePath = filePath,
             CreatedBy = userId,
             CreatedAt = DateTime.UtcNow
         };

@@ -138,3 +138,11 @@ C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Deb
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\BCrypt.Net-Next.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.Business.dll
 C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RequestManagement.Business.pdb
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\ClosedXML.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\ClosedXML.Parser.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\DocumentFormat.OpenXml.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\ExcelNumberFormat.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\RBush.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\SixLabors.Fonts.dll
+C:\Users\Emin\Desktop\C#Projects\RequestManagement\RequestManagement.API\bin\Debug\net10.0\System.IO.Packaging.dll
