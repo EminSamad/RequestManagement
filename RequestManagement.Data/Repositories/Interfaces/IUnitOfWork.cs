@@ -7,6 +7,7 @@ namespace RequestManagement.Data.Repositories.Interfaces;
     IGenericRepository<Role> Roles { get; }
     IGenericRepository<Request> Requests { get; }
     IGenericRepository<Category> Categories { get; }
+    Task<User?> GetUserWithRolesAsync(string email);
     
     Task<int> SaveChangesAsync();
 

@@ -25,6 +25,7 @@ public class RequestController : ControllerBase
         int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
     [HttpGet("my-requests")]
+    [Authorize(Roles = "Requester,Admin")]
     public async Task<IActionResult> GetMyRequests()
     {
         var result = await _requestService.GetMyRequestsAsync(GetUserId());
@@ -32,6 +33,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpGet("requests-to-me")]
+    [Authorize(Roles = "Executor,Admin")]
     public async Task<IActionResult> GetRequestsToMe()
     {
         var result = await _requestService.GetRequestsToMeAsync(GetUserId());
@@ -39,6 +41,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPost("create")]
+    [Authorize(Roles = "Requester,Admin")]
     public async Task<IActionResult> Create([FromForm] CreateRequestDto dto, IFormFile? file)
     {
         string? filePath = null;
@@ -50,6 +53,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPost("respond")]
+    [Authorize(Roles = "Executor,Admin")]
     public async Task<IActionResult> Respond(ResponseRequestDto dto)
     {
         await _requestService.RespondToRequestAsync(dto, GetUserId());
@@ -57,6 +61,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPatch("{id}/in-progress")]
+    [Authorize(Roles = "Executor,Admin")]
     public async Task<IActionResult> ChangeToInProgress(int id)
     {
         await _requestService.ChangeStatusToInProgressAsync(id, GetUserId());
@@ -64,6 +69,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPatch("{id}/complete")]
+    [Authorize(Roles = "Executor,Admin")]
     public async Task<IActionResult> Complete(int id)
     {
         await _requestService.CompleteRequestAsync(id, GetUserId());
@@ -71,6 +77,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPatch("{id}/approve")]
+    [Authorize(Roles = "Requester,Admin")]
     public async Task<IActionResult> Approve(int id)
     {
         await _requestService.ApproveRequestAsync(id, GetUserId());
@@ -78,6 +85,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPatch("{id}/decline")]
+    [Authorize(Roles = "Requester,Admin")]
     public async Task<IActionResult> Decline(int id)
     {
         await _requestService.DeclineRequestAsync(id, GetUserId());
@@ -85,6 +93,7 @@ public class RequestController : ControllerBase
     }
 
     [HttpPatch("{id}/reject")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Reject(int id)
     {
         await _requestService.RejectRequestAsync(id, GetUserId());

@@ -7,7 +7,7 @@ namespace RequestManagement.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(Roles = "Admin")]
 public class ReportController : ControllerBase
 {
     private readonly IReportService _reportService;

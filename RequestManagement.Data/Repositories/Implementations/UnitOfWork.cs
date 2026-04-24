@@ -1,7 +1,7 @@
 using RequestManagement.Data.Context;
 using RequestManagement.Data.Repositories.Interfaces;
 using RequestManagement.Core.Entities;
-using RequestManagement.Data.Repositories.Implementations;
+using Microsoft.EntityFrameworkCore;
 
 namespace RequestManagement.Data.Repositories.Implementations;
 
@@ -28,4 +28,12 @@ public class UnitOfWork : IUnitOfWork
 
     public void Dispose()
         => _context.Dispose();
+
+        public async Task<User?> GetUserWithRolesAsync(string email)
+{
+    return await _context.Users
+        .Include(u => u.UserRoles)
+        .ThenInclude(ur => ur.Role)
+        .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
+}
 }

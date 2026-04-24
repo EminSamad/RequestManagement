@@ -43,10 +43,10 @@ public class AuthService : IAuthService
 
     public async Task<TokenResponseDto> LoginAsync(LoginDto dto)
     {
-        var users = await _unitOfWork.Users.GetAllAsync();
-        var user = users.FirstOrDefault(u => u.Email == dto.Email);
+        var user = await _unitOfWork.GetUserWithRolesAsync(dto.Email);
 
         if (user == null || !BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
+            
             throw new Exception("Invalid email or password");
 
         return GenerateToken(user);
@@ -59,12 +59,20 @@ public class AuthService : IAuthService
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.UtcNow.AddDays(1);
 
-        var claims = new[]
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Name, user.FullName)
+    };
+
+        if (user.UserRoles != null)
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Email, user.Email),
-            new Claim(ClaimTypes.Name, user.FullName)
-        };
+            foreach (var userRole in user.UserRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            }
+        }
 
         var token = new JwtSecurityToken(
             issuer: _configuration["Jwt:Issuer"],
