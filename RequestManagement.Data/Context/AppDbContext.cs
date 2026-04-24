@@ -51,4 +51,9 @@ public class AppDbContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
+    internal async Task<int> SaveChangesAsync()
+    {
+        throw new NotImplementedException();
+    }
 }

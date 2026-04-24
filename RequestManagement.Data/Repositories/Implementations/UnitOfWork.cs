@@ -1,6 +1,7 @@
 using RequestManagement.Data.Context;
 using RequestManagement.Data.Repositories.Interfaces;
 using RequestManagement.Core.Entities;
+using RequestManagement.Data.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 namespace RequestManagement.Data.Repositories.Implementations;
