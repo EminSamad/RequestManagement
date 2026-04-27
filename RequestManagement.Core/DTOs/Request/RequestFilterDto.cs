@@ -9,4 +9,6 @@ public class RequestFilterDto
     public Priority? Priority { get; set; }
     public RequestStatus? Status { get; set; }
     public bool OrderByDateAsc { get; set; } = false;
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 10;
 }

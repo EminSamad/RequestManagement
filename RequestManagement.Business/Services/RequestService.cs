@@ -27,9 +27,9 @@ public class RequestService : IRequestService
                 Id = r.Id,
                 Title = r.Title,
                 Description = r.Description,
-                Priority = r.Priority,
+                Priority = r.Priority.ToString(),
                 DueDate = r.DueDate,
-                Status = r.Status,
+                Status = r.Status.ToString(),
                 FilePath = r.FilePath,
                 CategoryId = r.CategoryId,
                 RequesterId = r.RequesterId,
@@ -48,9 +48,9 @@ public class RequestService : IRequestService
                 Id = r.Id,
                 Title = r.Title,
                 Description = r.Description,
-                Priority = r.Priority,
+                Priority = r.Priority.ToString(),
                 DueDate = r.DueDate,
-                Status = r.Status,
+                Status = r.Status.ToString(),
                 FilePath = r.FilePath,
                 CategoryId = r.CategoryId,
                 RequesterId = r.RequesterId,
@@ -222,14 +222,18 @@ public class RequestService : IRequestService
         else
             query = query.OrderByDescending(r => r.DueDate);
 
+        query = query
+        .Skip((filter.PageNumber - 1) * filter.PageSize)
+        .Take(filter.PageSize);
+
         return query.Select(r => new RequestDto
         {
             Id = r.Id,
             Title = r.Title,
             Description = r.Description,
-            Priority = r.Priority,
+            Priority = r.Priority.ToString(),
             DueDate = r.DueDate,
-            Status = r.Status,
+            Status = r.Status.ToString(),
             FilePath = r.FilePath,
             CategoryId = r.CategoryId,
             RequesterId = r.RequesterId,
