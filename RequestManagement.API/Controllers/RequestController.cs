@@ -99,4 +99,13 @@ public class RequestController : ControllerBase
         await _requestService.RejectRequestAsync(id, GetUserId());
         return Ok("Request rejected");
     }
+
+    [HttpGet("filter")]
+    [Authorize(Roles = "Admin,Requester,Executor")]
+    public async Task<IActionResult> GetFilteredRequests([FromQuery] RequestFilterDto filter)
+    {
+        var result = await _requestService.GetFilteredRequestsAsync(filter);
+        return Ok(result);
+    }
+
 }

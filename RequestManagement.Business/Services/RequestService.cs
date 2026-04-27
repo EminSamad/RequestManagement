@@ -197,4 +197,37 @@ public class RequestService : IRequestService
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
     }
+
+    public async Task<IEnumerable<RequestDto>> GetFilteredRequestsAsync(RequestFilterDto filter)
+    {
+        var requests = await _unitOfWork.Requests.GetAllAsync();
+
+        var query = requests.AsQueryable();
+
+        if (!string.IsNullOrEmpty(filter.SearchText))
+            query = query.Where(r => r.Title.Contains(filter.SearchText) ||
+                                     r.Description.Contains(filter.SearchText));
+
+        if (filter.CategoryId.HasValue)
+            query = query.Where(r => r.CategoryId == filter.CategoryId);
+
+        if (filter.Priority.HasValue)
+            query = query.Where(r => r.Priority == filter.Priority.Value);
+
+        if (filter.Status.HasValue)
+            query = query.Where(r => r.Status == filter.Status.Value);
+        return query.Select(r => new RequestDto
+        {
+            Id = r.Id,
+            Title = r.Title,
+            Description = r.Description,
+            Priority = r.Priority,
+            DueDate = r.DueDate,
+            Status = r.Status,
+            FilePath = r.FilePath,
+            CategoryId = r.CategoryId,
+            RequesterId = r.RequesterId,
+            ExecutorId = r.ExecutorId
+        });
+    }
 }
