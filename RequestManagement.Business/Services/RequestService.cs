@@ -216,6 +216,12 @@ public class RequestService : IRequestService
 
         if (filter.Status.HasValue)
             query = query.Where(r => r.Status == filter.Status.Value);
+
+        if (filter.OrderByDateAsc)
+            query = query.OrderBy(r => r.DueDate);
+        else
+            query = query.OrderByDescending(r => r.DueDate);
+
         return query.Select(r => new RequestDto
         {
             Id = r.Id,

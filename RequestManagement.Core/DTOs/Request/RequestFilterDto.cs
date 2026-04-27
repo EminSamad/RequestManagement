@@ -8,4 +8,5 @@ public class RequestFilterDto
     public int? CategoryId { get; set; }
     public Priority? Priority { get; set; }
     public RequestStatus? Status { get; set; }
+    public bool OrderByDateAsc { get; set; } = false;
 }
