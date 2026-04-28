@@ -10,10 +10,12 @@ namespace RequestManagement.Business.Services;
 public class RequestService : IRequestService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
 
-    public RequestService(IUnitOfWork unitOfWork)
+    public RequestService(IUnitOfWork unitOfWork, IEmailService emailService)
     {
         _unitOfWork = unitOfWork;
+        _emailService = emailService;
     }
 
     public async Task<IEnumerable<RequestDto>> GetMyRequestsAsync(int userId)
@@ -76,6 +78,19 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.AddAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        await _unitOfWork.SaveChangesAsync();
+
+        // Email notification
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var requester = users.FirstOrDefault(u => u.Id == userId);
+
+        if (requester != null)
+            await _emailService.SendEmailAsync(
+                requester.Email,
+                "Request Created",
+                $"<h3>Your request '{request.Title}' has been created successfully!</h3>"
+            );
     }
 
     public async Task RespondToRequestAsync(ResponseRequestDto dto, int executorId)
@@ -96,6 +111,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var requester = users.FirstOrDefault(u => u.Id == request.RequesterId);
+
+        if (requester != null)
+            await _emailService.SendEmailAsync(
+                requester.Email,
+                "Response Received",
+                $"<h3>You have received a response for your request '{request.Title}'!</h3>"
+            );
     }
 
     public async Task ChangeStatusToInProgressAsync(int requestId, int executorId)
@@ -115,6 +140,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var executor = users.FirstOrDefault(u => u.Id == executorId);
+
+        if (executor != null)
+            await _emailService.SendEmailAsync(
+                executor.Email,
+                "New Request Assigned",
+                $"<h3>A new request '{request.Title}' has been assigned to you!</h3>"
+            );
     }
 
     public async Task CompleteRequestAsync(int requestId, int executorId)
@@ -136,6 +171,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var requester = users.FirstOrDefault(u => u.Id == request.RequesterId);
+
+        if (requester != null)
+            await _emailService.SendEmailAsync(
+                requester.Email,
+                "Request Completed",
+                $"<h3>Your request '{request.Title}' has been completed!</h3>"
+            );
     }
 
     public async Task ApproveRequestAsync(int requestId, int userId)
@@ -157,6 +202,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var executor = users.FirstOrDefault(u => u.Id == request.ExecutorId);
+
+        if (executor != null)
+            await _emailService.SendEmailAsync(
+                executor.Email,
+                "Request Approved",
+                $"<h3>Your work on request '{request.Title}' has been approved!</h3>"
+            );
     }
 
     public async Task DeclineRequestAsync(int requestId, int userId)
@@ -178,6 +233,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var executor = users.FirstOrDefault(u => u.Id == request.ExecutorId);
+
+        if (executor != null)
+            await _emailService.SendEmailAsync(
+                executor.Email,
+                "Request Declined",
+                $"<h3>Your work on request '{request.Title}' has been declined!</h3>"
+            );
     }
 
     public async Task RejectRequestAsync(int requestId, int userId)
@@ -196,6 +261,16 @@ public class RequestService : IRequestService
 
         await _unitOfWork.Requests.UpdateAsync(request);
         await _unitOfWork.SaveChangesAsync();
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        var requester = users.FirstOrDefault(u => u.Id == request.RequesterId);
+
+        if (requester != null)
+            await _emailService.SendEmailAsync(
+                requester.Email,
+                "Request Rejected",
+                $"<h3>Your request '{request.Title}' has been rejected!</h3>"
+            );
     }
 
     public async Task<IEnumerable<RequestDto>> GetFilteredRequestsAsync(RequestFilterDto filter)
