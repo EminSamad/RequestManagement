@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Request> Requests { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }  
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -52,8 +53,4 @@ public class AppDbContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    internal async Task<int> SaveChangesAsync()
-    {
-        throw new NotImplementedException();
-    }
 }

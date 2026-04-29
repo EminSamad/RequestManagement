@@ -8,5 +8,6 @@ namespace RequestManagement.Core.Entities
 
         public  ICollection<UserRole> UserRoles { get; set; }
         public  ICollection<Request> CreatedRequests { get; set; }
+        public  ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

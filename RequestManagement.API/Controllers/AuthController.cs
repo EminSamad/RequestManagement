@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Business.Interfaces;
 using RequestManagement.Core.DTOs.Auth;
@@ -27,6 +28,14 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Login(LoginDto dto)
     {
         var result = await _authService.LoginAsync(dto);
+        return Ok(result);
+    }
+
+    [HttpPost("refresh-token")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RefreshToken([FromBody] string refreshToken)
+    {
+        var result = await _authService.RefreshTokenAsync(refreshToken);
         return Ok(result);
     }
 }
