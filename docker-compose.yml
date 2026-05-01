@@ -9,16 +9,16 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=postgres;Database=RequestManagementDb;Username=postgres;Password=EminSamad
-      - Jwt__Key=RequestManagement@SuperSecretKey#2024!!
-      - Jwt__Issuer=RequestManagement
-      - Jwt__Audience=RequestManagement
-      - Redis__ConnectionString=redis:6379
-      - MailSettings__Host=sandbox.smtp.mailtrap.io
-      - MailSettings__Port=2525
-      - MailSettings__From=noreply@requestmanagement.com
-      - MailSettings__Username=your_mailtrap_username
-      - MailSettings__Password=your_mailtrap_password
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      - Jwt__Key=${JWT_KEY}
+      - Jwt__Issuer=${JWT_ISSUER}
+      - Jwt__Audience=${JWT_AUDIENCE}
+      - Redis__ConnectionString=${REDIS_CONNECTION}
+      - MailSettings__Host=${MAIL_HOST}
+      - MailSettings__Port=${MAIL_PORT}
+      - MailSettings__From=${MAIL_FROM}
+      - MailSettings__Username=${MAIL_USERNAME}
+      - MailSettings__Password=${MAIL_PASSWORD}
     depends_on:
       - postgres
       - redis
@@ -28,9 +28,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      - POSTGRES_DB=RequestManagementDb
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=EminSamad
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
