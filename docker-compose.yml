@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=RequestManagementDb;Username=postgres;Password=EminSamad
+      - Jwt__Key=RequestManagement@SuperSecretKey#2024!!
+      - Jwt__Issuer=RequestManagement
+      - Jwt__Audience=RequestManagement
+      - Redis__ConnectionString=redis:6379
+      - MailSettings__Host=sandbox.smtp.mailtrap.io
+      - MailSettings__Port=2525
+      - MailSettings__From=noreply@requestmanagement.com
+      - MailSettings__Username=your_mailtrap_username
+      - MailSettings__Password=your_mailtrap_password
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=RequestManagementDb
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=EminSamad
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:

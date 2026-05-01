@@ -41,12 +41,15 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -55,10 +58,13 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+
+//Redis Cache
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.Configuration = builder.Configuration["Redis:ConnectionString"];
 });
+
 
 
 // JWT Authentication
