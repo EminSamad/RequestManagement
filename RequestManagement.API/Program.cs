@@ -9,8 +9,15 @@ using RequestManagement.Business.Interfaces;
 using RequestManagement.Business.Services;
 using RequestManagement.API.Middlewares;
 using RequestManagement.API.Services;
+using Karambolo.Extensions.Logging.File;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Logging.AddFile(options =>
+{
+    options.RootPath = AppContext.BaseDirectory;
+    options.Files = new[] { new LogFileOptions { Path = "logs/log-<date>.txt" } };
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
