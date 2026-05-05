@@ -27,29 +27,26 @@ builder.Services.AddSwaggerGen(c =>
     });
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
-                new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
-                    Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                    {
-                        Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    }
-                },
-                Array.Empty<string>()
-            }
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
     });
 });
-
 
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
 // UnitOfWork
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
 
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -58,14 +55,19 @@ builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
-
-//Redis Cache
-builder.Services.AddStackExchangeRedisCache(options =>
+// Cache - Use Redis if available, otherwise in-memory
+var redisConnection = builder.Configuration["Redis:ConnectionString"];
+if (!string.IsNullOrEmpty(redisConnection))
 {
-    options.Configuration = builder.Configuration["Redis:ConnectionString"];
-});
-
-
+    builder.Services.AddStackExchangeRedisCache(options =>
+    {
+        options.Configuration = redisConnection;
+    });
+}
+else
+{
+    builder.Services.AddDistributedMemoryCache();
+}
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

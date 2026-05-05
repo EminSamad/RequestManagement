@@ -11,3 +11,10 @@ public class ReportDto
     public DateTime? ResponseTime { get; set; }
     public string Status { get; set; } = null!;
 }
+
+// {
+// "generalsearch" : "Emin",
+// "orderby" : "createdat desc",
+// "desc:" : true,
+
+// }

@@ -11,28 +11,35 @@ namespace RequestManagement.API.Controllers;
 public class ReportController : ControllerBase
 {
     private readonly IReportService _reportService;
+    private readonly ILogger<ReportController> _logger;
 
-    public ReportController(IReportService reportService)
+    public ReportController(IReportService reportService, ILogger<ReportController> logger)
     {
         _reportService = reportService;
+        _logger = logger;
     }
 
     [HttpGet]
+    //TODO add filter
     public async Task<IActionResult> GetReport()
     {
+        _logger.LogInformation("Admin fetching report");
         var report = await _reportService.GetReportAsync();
+        _logger.LogInformation("Report fetched successfully with {Count} records", report.Count());
         return Ok(report);
     }
 
+//tod
     [HttpGet("export-excel")]
+    //TODO filter
     public async Task<IActionResult> ExportToExcel()
     {
+        _logger.LogInformation("Admin exporting report to Excel");
         var report = await _reportService.GetReportAsync();
 
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Report");
 
-        // Header
         worksheet.Cell(1, 1).Value = "Request ID";
         worksheet.Cell(1, 2).Value = "Category";
         worksheet.Cell(1, 3).Value = "Priority";
@@ -42,12 +49,10 @@ public class ReportController : ControllerBase
         worksheet.Cell(1, 7).Value = "Response Time";
         worksheet.Cell(1, 8).Value = "Status";
 
-        // Style header
         var headerRow = worksheet.Row(1);
         headerRow.Style.Font.Bold = true;
         headerRow.Style.Fill.BackgroundColor = XLColor.LightBlue;
 
-        // Data
         int row = 2;
         foreach (var item in report)
         {
@@ -68,8 +73,9 @@ public class ReportController : ControllerBase
         workbook.SaveAs(stream);
         stream.Position = 0;
 
-        return File(stream.ToArray(), 
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", 
+        _logger.LogInformation("Report exported to Excel successfully");
+        return File(stream.ToArray(),
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "report.xlsx");
     }
 }

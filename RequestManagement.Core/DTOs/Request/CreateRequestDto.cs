@@ -20,4 +20,7 @@ public class CreateRequestDto
 
     [Range(1, int.MaxValue, ErrorMessage = "CategoryId must be greater than 0")]
     public int CategoryId { get; set; }
+
+    //add file
+    
 }

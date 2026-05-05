@@ -484,3 +484,5 @@ $RECYCLE.BIN/
 **/appsettings.json
 
 .env
+
+backup.sql

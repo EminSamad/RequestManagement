@@ -7,10 +7,12 @@ namespace RequestManagement.API.Middlewares;
 public class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate _next;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger;
 
-    public ExceptionHandlingMiddleware(RequestDelegate next)
+    public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
     {
         _next = next;
+        _logger = logger;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -21,18 +23,22 @@ public class ExceptionHandlingMiddleware
         }
         catch (NotFoundException ex)
         {
+            _logger.LogWarning("Not found: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.NotFound, ex.Message);
         }
         catch (ForbiddenException ex)
         {
+            _logger.LogWarning("Forbidden: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.Forbidden, ex.Message);
         }
         catch (BadRequestException ex)
         {
+            _logger.LogWarning("Bad request: {Message}", ex.Message);
             await WriteResponse(context, HttpStatusCode.BadRequest, ex.Message);
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Unexpected error occurred");
             await WriteResponse(context, HttpStatusCode.InternalServerError, "An unexpected error occurred");
         }
     }

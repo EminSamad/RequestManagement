@@ -13,11 +13,13 @@ public class CategoryController : ControllerBase
 {
     private readonly IUnitOfWork _unitOfWork;
     private readonly IDistributedCache _cache;
+    private readonly ILogger<CategoryController> _logger;
 
-    public CategoryController(IUnitOfWork unitOfWork, IDistributedCache cache)
+    public CategoryController(IUnitOfWork unitOfWork, IDistributedCache cache, ILogger<CategoryController> logger)
     {
         _unitOfWork = unitOfWork;
         _cache = cache;
+        _logger = logger;
     }
 
     [HttpGet]
@@ -28,10 +30,12 @@ public class CategoryController : ControllerBase
         var cached = await _cache.GetStringAsync(cacheKey);
         if (cached != null)
         {
+            _logger.LogInformation("Categories fetched from Redis cache");
             var cachedCategories = JsonSerializer.Deserialize<object>(cached);
             return Ok(cachedCategories);
         }
 
+        _logger.LogInformation("Categories fetched from database");
         var categories = await _unitOfWork.Categories.GetAllAsync();
 
         var options = new DistributedCacheEntryOptions
