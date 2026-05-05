@@ -2,6 +2,7 @@ using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Business.Interfaces;
+using RequestManagement.Core.DTOs.Report;
 
 namespace RequestManagement.API.Controllers;
 
@@ -19,23 +20,20 @@ public class ReportController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    //TODO add filter
-    public async Task<IActionResult> GetReport()
+    [HttpGet("filter")]
+    public async Task<IActionResult> GetFilteredReport([FromQuery] ReportFilterDto filter)
     {
-        _logger.LogInformation("Admin fetching report");
-        var report = await _reportService.GetReportAsync();
-        _logger.LogInformation("Report fetched successfully with {Count} records", report.Count());
+        _logger.LogInformation("Admin fetching filtered report");
+        var report = await _reportService.GetFilteredReportAsync(filter);
+        _logger.LogInformation("Filtered report fetched successfully with {Count} records", report.Count());
         return Ok(report);
     }
 
-//tod
     [HttpGet("export-excel")]
-    //TODO filter
-    public async Task<IActionResult> ExportToExcel()
+    public async Task<IActionResult> ExportToExcel([FromQuery] ReportFilterDto filter)
     {
-        _logger.LogInformation("Admin exporting report to Excel");
-        var report = await _reportService.GetReportAsync();
+        _logger.LogInformation("Admin exporting filtered report to Excel");
+        var report = await _reportService.GetFilteredReportAsync(filter);
 
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Report");

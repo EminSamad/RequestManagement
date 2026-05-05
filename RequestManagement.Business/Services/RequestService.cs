@@ -292,14 +292,23 @@ public class RequestService : IRequestService
         if (filter.Status.HasValue)
             query = query.Where(r => r.Status == filter.Status.Value);
 
-        if (filter.OrderByDateAsc)
-            query = query.OrderBy(r => r.DueDate);
-        else
-            query = query.OrderByDescending(r => r.DueDate);
+        query = filter.OrderBy?.ToLower() switch
+        {
+            "date" => filter.OrderByAsc
+                ? query.OrderBy(r => r.DueDate)
+                : query.OrderByDescending(r => r.DueDate),
+            "status" => filter.OrderByAsc
+                ? query.OrderBy(r => r.Status)
+                : query.OrderByDescending(r => r.Status),
+            "priority" => filter.OrderByAsc
+                ? query.OrderBy(r => r.Priority)
+                : query.OrderByDescending(r => r.Priority),
+            _ => query.OrderByDescending(r => r.DueDate)
+        };
 
         query = query
-        .Skip((filter.PageNumber - 1) * filter.PageSize)
-        .Take(filter.PageSize);
+            .Skip((filter.PageNumber - 1) * filter.PageSize)
+            .Take(filter.PageSize);
 
         return query.Select(r => new RequestDto
         {
