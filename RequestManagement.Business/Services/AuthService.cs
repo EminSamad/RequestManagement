@@ -42,6 +42,18 @@ public class AuthService : IAuthService
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
 
+        var userRole = new UserRole
+        {
+            UserId = user.Id,
+            RoleId = 2,
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = user.Id
+        };
+        
+        await _unitOfWork.UserRoles.AddAsync(userRole);
+        await _unitOfWork.SaveChangesAsync();
+
+
         await _emailService.SendEmailAsync(
             dto.Email,
             "Welcome to Request Management!",
