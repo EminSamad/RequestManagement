@@ -10,6 +10,7 @@ public interface IUnitOfWork : IDisposable
     IGenericRepository<Category> Categories { get; }
     IGenericRepository<RefreshToken> RefreshTokens { get; }
     IGenericRepository<UserRole> UserRoles { get; }
+    IGenericRepository<InviteToken> InviteTokens { get; }
     Task<User?> GetUserWithRolesAsync(string email);
     Task<User?> GetUserWithRolesByIdAsync(int userId);
     Task<int> SaveChangesAsync();

@@ -19,7 +19,21 @@ builder.Logging.AddFile(options =>
     options.Files = new[] { new LogFileOptions { Path = "logs/log-<date>.txt" } };
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(e => e.Value!.Errors.Count > 0)
+                .ToDictionary(
+                    e => e.Key,
+                    e => e.Value!.Errors.Select(x => x.ErrorMessage).ToArray()
+                );
+
+            return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(new { errors });
+        };
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>

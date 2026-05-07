@@ -14,7 +14,8 @@ public class UnitOfWork : IUnitOfWork
     private IGenericRepository<Request>? _requests;
     private IGenericRepository<Category>? _categories;
     private IGenericRepository<RefreshToken>? _refreshTokens;
-    private IGenericRepository<UserRole>? _userRoles;   
+    private IGenericRepository<UserRole>? _userRoles;
+    private IGenericRepository<InviteToken>? _inviteTokens;
 
 
     public UnitOfWork(AppDbContext context)
@@ -28,6 +29,7 @@ public class UnitOfWork : IUnitOfWork
     public IGenericRepository<Category> Categories => _categories ??= new GenericRepository<Category>(_context);
     public IGenericRepository<RefreshToken> RefreshTokens => _refreshTokens ??= new GenericRepository<RefreshToken>(_context);
     public IGenericRepository<UserRole> UserRoles => _userRoles ??= new GenericRepository<UserRole>(_context);
+    public IGenericRepository<InviteToken> InviteTokens => _inviteTokens ??= new GenericRepository<InviteToken>(_context);
     public async Task<int> SaveChangesAsync()
         => await _context.SaveChangesAsync();
 

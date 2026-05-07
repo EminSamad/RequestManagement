@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Business.Interfaces;
 using RequestManagement.Core.DTOs.Auth;
 using RequestManagement.Core.DTOs.User;
+using RequestManagement.Core.Entities;
 
 namespace RequestManagement.API.Controllers;
 
@@ -46,5 +47,24 @@ public class AuthController : ControllerBase
         var result = await _authService.RefreshTokenAsync(refreshToken);
         _logger.LogInformation("Token refreshed successfully");
         return Ok(result);
+    }
+    [HttpPost("invite")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> Invite([FromBody] InviteDto dto)
+    {
+        _logger.LogInformation("Admin inviting user: {Email}", dto.Email);
+        await _authService.InviteUserAsync(dto.Email, dto.RoleId);
+        _logger.LogInformation("Invitation sent to: {Email}", dto.Email);
+        return Ok("Invitation sent successfully");
+    }
+
+    [HttpPost("register-with-token")]
+    [AllowAnonymous]
+    public async Task<IActionResult> RegisterWithToken([FromBody] RegisterDto dto, [FromQuery] string token)
+    {
+        _logger.LogInformation("User registering with invite token: {Email}", dto.Email);
+        await _authService.RegisterWithTokenAsync(dto, token);
+        _logger.LogInformation("User registered with invite token: {Email}", dto.Email);
+        return Ok("User registered successfully");
     }
 }

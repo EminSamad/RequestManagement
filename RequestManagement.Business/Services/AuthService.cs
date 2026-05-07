@@ -8,6 +8,7 @@ using RequestManagement.Core.DTOs.Auth;
 using RequestManagement.Core.DTOs.User;
 using RequestManagement.Core.Entities;
 using RequestManagement.Data.Repositories.Interfaces;
+using RequestManagement.Core.Exceptions;
 
 namespace RequestManagement.Business.Services;
 
@@ -49,7 +50,7 @@ public class AuthService : IAuthService
             CreatedAt = DateTime.UtcNow,
             CreatedBy = user.Id
         };
-        
+
         await _unitOfWork.UserRoles.AddAsync(userRole);
         await _unitOfWork.SaveChangesAsync();
 
@@ -136,5 +137,76 @@ public class AuthService : IAuthService
             Expiration = expires,
             RefreshToken = refreshToken.Token
         };
+    }
+    public async Task InviteUserAsync(string email, int roleId)
+    {
+        var inviteToken = new InviteToken
+        {
+            Token = Guid.NewGuid().ToString(),
+            Email = email,
+            RoleId = roleId,
+            IsUsed = false,
+            ExpiresAt = DateTime.UtcNow.AddDays(7),
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = 1
+        };
+
+        await _unitOfWork.InviteTokens.AddAsync(inviteToken);
+        await _unitOfWork.SaveChangesAsync();
+
+        await _emailService.SendEmailAsync(
+            email,
+            "You are invited to Request Management!",
+            $"<h3>You have been invited!</h3><p>Click the link to register:</p><a href='http://localhost:5024/api/auth/register?token={inviteToken.Token}'>Register</a>"
+        );
+    }
+    public async Task RegisterWithTokenAsync(RegisterDto dto, string token)
+    {
+        var tokens = await _unitOfWork.InviteTokens.GetAllAsync();
+        var inviteToken = tokens.FirstOrDefault(t => t.Token == token
+                                                   && !t.IsUsed
+                                                   && t.ExpiresAt > DateTime.UtcNow
+                                                   && t.Email == dto.Email);
+
+        if (inviteToken == null)
+            throw new BadRequestException("Invalid or expired invite token");
+
+        var users = await _unitOfWork.Users.GetAllAsync();
+        if (users.Any(u => u.Email == dto.Email))
+            throw new BadRequestException("Email already exists");
+
+        var user = new User
+        {
+            FullName = dto.FullName,
+            Email = dto.Email,
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = 0
+        };
+
+        await _unitOfWork.Users.AddAsync(user);
+        await _unitOfWork.SaveChangesAsync();
+
+        var userRole = new UserRole
+        {
+            UserId = user.Id,
+            RoleId = inviteToken.RoleId,
+            CreatedAt = DateTime.UtcNow,
+            CreatedBy = user.Id
+        };
+
+        await _unitOfWork.UserRoles.AddAsync(userRole);
+
+        inviteToken.IsUsed = true;
+        inviteToken.ModifiedAt = DateTime.UtcNow;
+        await _unitOfWork.InviteTokens.UpdateAsync(inviteToken);
+
+        await _unitOfWork.SaveChangesAsync();
+
+        await _emailService.SendEmailAsync(
+            dto.Email,
+            "Welcome to Request Management!",
+            $"<h3>Welcome {dto.FullName}!</h3><p>Your account has been created successfully.</p>"
+        );
     }
 }
