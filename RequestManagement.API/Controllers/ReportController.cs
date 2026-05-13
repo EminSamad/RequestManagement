@@ -28,6 +28,7 @@ public class ReportController : ControllerBase
         _logger.LogInformation("Filtered report fetched successfully with {Count} records", report.Count());
         return Ok(report);
     }
+    
 
     [HttpGet("export-excel")]
     public async Task<IActionResult> ExportToExcel([FromQuery] ReportFilterDto filter)

@@ -10,6 +10,9 @@ using RequestManagement.Business.Services;
 using RequestManagement.API.Middlewares;
 using RequestManagement.API.Services;
 using Karambolo.Extensions.Logging.File;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using RequestManagement.Business.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,9 @@ builder.Services.AddControllers()
             return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(new { errors });
         };
     });
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(c =>
