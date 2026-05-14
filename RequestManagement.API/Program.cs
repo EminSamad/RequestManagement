@@ -13,6 +13,9 @@ using Karambolo.Extensions.Logging.File;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using RequestManagement.Business.Validators;
+using Hangfire;
+using Hangfire.PostgreSql;
+using RequestManagement.Business.BackgroundJobs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +71,13 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+builder.Services.AddHangfire(config =>
+    config.UsePostgreSqlStorage(options =>
+        options.UseNpgsqlConnection(
+            builder.Configuration.GetConnectionString("DefaultConnection"))));
+
+builder.Services.AddHangfireServer();
+
 // DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -81,6 +91,9 @@ builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<FileService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<EmailJobService>();
+builder.Services.AddScoped<ReminderJobService>();
+builder.Services.AddScoped<ReportJobService>();
 
 // Cache - Use Redis if available, otherwise in-memory
 var redisConnection = builder.Configuration["Redis:ConnectionString"];
@@ -123,8 +136,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
+app.UseHangfireDashboard("/hangfire");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
+RecurringJob.AddOrUpdate<ReportJobService>(
+    "weekly-report",
+    x => x.SendWeeklyReport(),
+    "0 8 * * 6");
+
+RecurringJob.AddOrUpdate<ReminderJobService>(
+    "daily-reminder",
+    x => x.SendReminder(),
+    "0 9 * * *");
 
 app.Run();

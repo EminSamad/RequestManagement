@@ -14,5 +14,6 @@ public interface IUnitOfWork : IDisposable
     Task<User?> GetUserWithRolesAsync(string email);
     Task<User?> GetUserWithRolesByIdAsync(int userId);
     Task<int> SaveChangesAsync();
+    Task<IEnumerable<User>> GetAllUsersWithRolesAsync();
 
 }

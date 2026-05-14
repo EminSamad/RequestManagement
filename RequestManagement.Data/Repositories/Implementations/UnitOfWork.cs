@@ -50,4 +50,12 @@ public class UnitOfWork : IUnitOfWork
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
     }
+    public async Task<IEnumerable<User>> GetAllUsersWithRolesAsync()
+    {
+        return await _context.Users
+            .Include(u => u.UserRoles)
+            .ThenInclude(ur => ur.Role)
+            .Where(u => !u.IsDeleted)
+            .ToListAsync();
+    }
 }
