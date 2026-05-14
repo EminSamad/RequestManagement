@@ -16,6 +16,7 @@ using RequestManagement.Business.Validators;
 using Hangfire;
 using Hangfire.PostgreSql;
 using RequestManagement.Business.BackgroundJobs;
+using RequestManagement.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -136,7 +137,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseHttpsRedirection();
-app.UseHangfireDashboard("/hangfire");
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new AllowAllConnectionsFilter() }
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
@@ -150,5 +154,11 @@ RecurringJob.AddOrUpdate<ReminderJobService>(
     "daily-reminder",
     x => x.SendReminder(),
     "0 9 * * *");
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
 
 app.Run();
