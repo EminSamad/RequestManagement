@@ -10,10 +10,10 @@ namespace RequestManagement.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameColumn(
-                name: "ExpiredAt",
-                table: "RefreshTokens",
-                newName: "ExpiresAt");
+            // migrationBuilder.RenameColumn(
+            //     name: "ExpiredAt",
+            //     table: "RefreshTokens",
+            //     newName: "ExpiresAt");
         }
 
         /// <inheritdoc />

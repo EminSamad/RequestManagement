@@ -95,6 +95,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<EmailJobService>();
 builder.Services.AddScoped<ReminderJobService>();
 builder.Services.AddScoped<ReportJobService>();
+builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
+builder.Services.AddHostedService<EmailConsumerService>();
 
 // Cache - Use Redis if available, otherwise in-memory
 var redisConnection = builder.Configuration["Redis:ConnectionString"];
