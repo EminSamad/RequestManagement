@@ -91,6 +91,16 @@ public class AuthService : IAuthService
 
     private async Task<TokenResponseDto> GenerateToken(User user)
     {
+
+        Console.WriteLine($"UserRoles count: {user.UserRoles?.Count()}");
+        if (user.UserRoles != null)
+        {
+            foreach (var ur in user.UserRoles)
+            {
+                Console.WriteLine($"Role: {ur.Role?.Name}");
+            }
+        }
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
             _configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

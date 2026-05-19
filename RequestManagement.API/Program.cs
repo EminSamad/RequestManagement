@@ -17,6 +17,7 @@ using Hangfire;
 using Hangfire.PostgreSql;
 using RequestManagement.Business.BackgroundJobs;
 using RequestManagement.API.Filters;
+using RequestManagement.API.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +98,7 @@ builder.Services.AddScoped<ReminderJobService>();
 builder.Services.AddScoped<ReportJobService>();
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 builder.Services.AddHostedService<EmailConsumerService>();
+builder.Services.AddSignalR();
 
 // Cache - Use Redis if available, otherwise in-memory
 var redisConnection = builder.Configuration["Redis:ConnectionString"];
@@ -146,6 +148,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<NotificationHub>("/hubs/notifications");
 
 RecurringJob.AddOrUpdate<ReportJobService>(
     "weekly-report",
@@ -162,5 +165,6 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
 }
+
 
 app.Run();
