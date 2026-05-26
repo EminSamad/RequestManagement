@@ -48,6 +48,7 @@ public class UnitOfWork : IUnitOfWork
         return await _context.Users
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
+            .IgnoreQueryFilters()
             .FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
     }
     public async Task<IEnumerable<User>> GetAllUsersWithRolesAsync()

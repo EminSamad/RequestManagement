@@ -52,19 +52,19 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Role>().HasQueryFilter(r => !r.IsDeleted);
         // modelBuilder.Entity<UserRole>().HasQueryFilter(ur => !ur.IsDeleted);
 
-        modelBuilder.Entity<UserRole>(entity =>
-{
-    entity.HasKey(ur => new { ur.UserId, ur.RoleId });
-    entity.HasQueryFilter(ur => !ur.IsDeleted);
+//         modelBuilder.Entity<UserRole>(entity =>
+// {
+//     entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+//     entity.HasQueryFilter(ur => !ur.IsDeleted);
 
-    entity.HasOne(ur => ur.User)
-        .WithMany(u => u.UserRoles)
-        .HasForeignKey(ur => ur.UserId);
+//     entity.HasOne(ur => ur.User)
+//         .WithMany(u => u.UserRoles)
+//         .HasForeignKey(ur => ur.UserId);
 
-    entity.HasOne(ur => ur.Role)
-        .WithMany(r => r.UserRoles)
-        .HasForeignKey(ur => ur.RoleId);
-});
+//     entity.HasOne(ur => ur.Role)
+//         .WithMany(r => r.UserRoles)
+//         .HasForeignKey(ur => ur.RoleId);
+// });
 
         base.OnModelCreating(modelBuilder);
     }

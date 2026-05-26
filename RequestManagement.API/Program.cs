@@ -18,15 +18,21 @@ using Hangfire.PostgreSql;
 using RequestManagement.Business.BackgroundJobs;
 using RequestManagement.API.Filters;
 using RequestManagement.API.Hubs;
+using RequestManagement.Data.Seed; // <-- IMPORTANT
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Logging
 builder.Logging.AddFile(options =>
 {
     options.RootPath = AppContext.BaseDirectory;
-    options.Files = new[] { new LogFileOptions { Path = "logs/log-<date>.txt" } };
+    options.Files = new[]
+    {
+        new LogFileOptions { Path = "logs/log-<date>.txt" }
+    };
 });
 
+// Controllers + Validation
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
@@ -45,8 +51,10 @@ builder.Services.AddControllers()
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
+
 builder.Services.AddEndpointsApiExplorer();
 
+// Swagger JWT
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
@@ -57,6 +65,7 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header
     });
+
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
@@ -73,6 +82,7 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Hangfire
 builder.Services.AddHangfire(config =>
     config.UsePostgreSqlStorage(options =>
         options.UseNpgsqlConnection(
@@ -84,10 +94,8 @@ builder.Services.AddHangfireServer();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// UnitOfWork
+// DI
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-// Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IRequestService, RequestService>();
 builder.Services.AddScoped<FileService>();
@@ -98,10 +106,12 @@ builder.Services.AddScoped<ReminderJobService>();
 builder.Services.AddScoped<ReportJobService>();
 builder.Services.AddSingleton<IRabbitMQService, RabbitMQService>();
 builder.Services.AddHostedService<EmailConsumerService>();
+
 builder.Services.AddSignalR();
 
-// Cache - Use Redis if available, otherwise in-memory
+// Cache
 var redisConnection = builder.Configuration["Redis:ConnectionString"];
+
 if (!string.IsNullOrEmpty(redisConnection))
 {
     builder.Services.AddStackExchangeRedisCache(options =>
@@ -114,7 +124,7 @@ else
     builder.Services.AddDistributedMemoryCache();
 }
 
-// JWT Authentication
+// JWT Auth
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -124,8 +134,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
+
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
@@ -133,6 +145,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
+// Dev tools
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -140,16 +153,21 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 app.UseHttpsRedirection();
+
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
     Authorization = new[] { new AllowAllConnectionsFilter() }
 });
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.MapHub<NotificationHub>("/hubs/notifications");
 
+// Recurring jobs
 RecurringJob.AddOrUpdate<ReportJobService>(
     "weekly-report",
     x => x.SendWeeklyReport(),
@@ -160,11 +178,13 @@ RecurringJob.AddOrUpdate<ReminderJobService>(
     x => x.SendReminder(),
     "0 9 * * *");
 
-using (var scope = app.Services.CreateScope())
+// DATABASE MIGRATION + SEEDER (FIX HERE)
+await using (var scope = app.Services.CreateAsyncScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
 
+    await db.Database.MigrateAsync();
+    await DbSeeder.SeedAsync(db);
+}
 
 app.Run();
