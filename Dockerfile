@@ -5,8 +5,8 @@ EXPOSE 8080
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 COPY ["RequestManagement.API/RequestManagement.API.csproj", "RequestManagement.API/"]
-COPY ["RequestManagement.Business/RequestManagement.Business.csproj", "RequestManagement.Business/"]
-COPY ["RequestManagement.Data/RequestManagement.Data.csproj", "RequestManagement.Data/"]
+COPY ["RequestManagement.Application/RequestManagement.Application.csproj", "RequestManagement.Application/"]
+COPY ["RequestManagement.Infrastructure/RequestManagement.Infrastructure.csproj", "RequestManagement.Infrastructure/"]
 COPY ["RequestManagement.Core/RequestManagement.Core.csproj", "RequestManagement.Core/"]
 RUN dotnet restore "RequestManagement.API/RequestManagement.API.csproj"
 COPY . .

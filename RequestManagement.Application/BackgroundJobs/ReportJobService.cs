@@ -1,43 +1,28 @@
 using ClosedXML.Excel;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.DTOs.Report;
+using RequestManagement.Core.Interfaces;
 
-namespace RequestManagement.API.Controllers;
+namespace RequestManagement.Application.BackgroundJobs;
 
-[ApiController]
-[Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
-public class ReportController : ControllerBase
+public class ReportJobService
 {
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IEmailService _emailService;
     private readonly IReportService _reportService;
-    private readonly ILogger<ReportController> _logger;
 
-    public ReportController(IReportService reportService, ILogger<ReportController> logger)
+    public ReportJobService(IUnitOfWork unitOfWork, IEmailService emailService, IReportService reportService)
     {
+        _unitOfWork = unitOfWork;
+        _emailService = emailService;
         _reportService = reportService;
-        _logger = logger;
     }
 
-    [HttpGet("filter")]
-    public async Task<IActionResult> GetFilteredReport([FromQuery] ReportFilterDto filter)
+    public async Task SendWeeklyReport()
     {
-        _logger.LogInformation("Admin fetching filtered report");
-        var report = await _reportService.GetFilteredReportAsync(filter);
-        _logger.LogInformation("Filtered report fetched successfully with {Count} records", report.Count());
-        return Ok(report);
-    }
-    
-
-    [HttpGet("export-excel")]
-    public async Task<IActionResult> ExportToExcel([FromQuery] ReportFilterDto filter)
-    {
-        _logger.LogInformation("Admin exporting filtered report to Excel");
-        var report = await _reportService.GetFilteredReportAsync(filter);
+        var report = await _reportService.GetReportAsync();
 
         using var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add("Report");
+        var worksheet = workbook.Worksheets.Add("Weekly Report");
 
         worksheet.Cell(1, 1).Value = "Request ID";
         worksheet.Cell(1, 2).Value = "Category";
@@ -70,11 +55,22 @@ public class ReportController : ControllerBase
 
         using var stream = new MemoryStream();
         workbook.SaveAs(stream);
-        stream.Position = 0;
+        var excelBytes = stream.ToArray();
 
-        _logger.LogInformation("Report exported to Excel successfully");
-        return File(stream.ToArray(),
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "report.xlsx");
+        // Get admins
+        var users = await _unitOfWork.GetAllUsersWithRolesAsync();
+        var admins = users
+            .Where(u => u.UserRoles != null &&
+                        u.UserRoles.Any(ur => ur.Role.Name == "Admin"))
+            .ToList();
+
+        foreach (var admin in admins)
+        {
+            await _emailService.SendEmailAsync(
+                admin.Email,
+                "Weekly Report",
+                $"<h3>Weekly Report</h3><p>Please find the weekly report attached.</p>"
+            );
+        }
     }
 }

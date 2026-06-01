@@ -1,0 +1,72 @@
+using Microsoft.EntityFrameworkCore;
+using RequestManagement.Core.Entities;
+using RequestManagement.Core.Enums;
+
+namespace RequestManagement.Infrastructure.Context;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
+    public DbSet<Request> Requests { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+    public DbSet<InviteToken> InviteTokens { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // UserRole many-to-many key
+        modelBuilder.Entity<UserRole>()
+            .HasKey(ur => new { ur.UserId, ur.RoleId });
+
+        // Request - Requester
+        modelBuilder.Entity<Request>()
+            .HasOne(r => r.Requester)
+            .WithMany(u => u.CreatedRequests)
+            .HasForeignKey(r => r.RequesterId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Request - Executor
+        modelBuilder.Entity<Request>()
+            .HasOne(r => r.Executor)
+            .WithMany()
+            .HasForeignKey(r => r.ExecutorId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Enum string conversion
+        modelBuilder.Entity<Request>()
+            .Property(r => r.Priority)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Request>()
+            .Property(r => r.Status)
+            .HasConversion<string>();
+
+        // Soft delete filter
+        modelBuilder.Entity<User>().HasQueryFilter(u => !u.IsDeleted);
+        modelBuilder.Entity<Request>().HasQueryFilter(r => !r.IsDeleted);
+        modelBuilder.Entity<Category>().HasQueryFilter(c => !c.IsDeleted);
+        modelBuilder.Entity<Role>().HasQueryFilter(r => !r.IsDeleted);
+        // modelBuilder.Entity<UserRole>().HasQueryFilter(ur => !ur.IsDeleted);
+
+//         modelBuilder.Entity<UserRole>(entity =>
+// {
+//     entity.HasKey(ur => new { ur.UserId, ur.RoleId });
+//     entity.HasQueryFilter(ur => !ur.IsDeleted);
+
+//     entity.HasOne(ur => ur.User)
+//         .WithMany(u => u.UserRoles)
+//         .HasForeignKey(ur => ur.UserId);
+
+//     entity.HasOne(ur => ur.Role)
+//         .WithMany(r => r.UserRoles)
+//         .HasForeignKey(ur => ur.RoleId);
+// });
+
+        base.OnModelCreating(modelBuilder);
+    }
+
+}

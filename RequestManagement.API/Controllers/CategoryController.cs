@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
-using RequestManagement.Data.Repositories.Interfaces;
+using RequestManagement.Core.Interfaces;
 using System.Text.Json;
 
 namespace RequestManagement.API.Controllers;

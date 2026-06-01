@@ -33,8 +33,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RequestManagement.Data\RequestManagement.Data.csproj" />
-    <ProjectReference Include="..\RequestManagement.Business\RequestManagement.Business.csproj" />
+    <ProjectReference Include="..\RequestManagement.Infrastructure\RequestManagement.Infrastructure.csproj" />
+    <ProjectReference Include="..\RequestManagement.Application\RequestManagement.Application.csproj" />
   </ItemGroup>
 
 </Project>

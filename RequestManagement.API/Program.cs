@@ -2,23 +2,23 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using RequestManagement.Data.Context;
-using RequestManagement.Data.Repositories.Interfaces;
-using RequestManagement.Data.Repositories.Implementations;
-using RequestManagement.Business.Interfaces;
-using RequestManagement.Business.Services;
+using RequestManagement.Infrastructure.Context;
+using RequestManagement.Core.Interfaces;
+using RequestManagement.Infrastructure.Repositories.Implementations;
+using RequestManagement.Application.Interfaces;
+using RequestManagement.Application.Services;
 using RequestManagement.API.Middlewares;
 using RequestManagement.API.Services;
 using Karambolo.Extensions.Logging.File;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using RequestManagement.Business.Validators;
+using RequestManagement.Application.Validators;
 using Hangfire;
 using Hangfire.PostgreSql;
-using RequestManagement.Business.BackgroundJobs;
+using RequestManagement.Application.BackgroundJobs;
 using RequestManagement.API.Filters;
 using RequestManagement.API.Hubs;
-using RequestManagement.Data.Seed; // <-- IMPORTANT
+using RequestManagement.Infrastructure.Seed; // <-- IMPORTANT
 
 var builder = WebApplication.CreateBuilder(args);
 
