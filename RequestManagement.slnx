@@ -1,6 +1,6 @@
 <Solution>
   <Project Path="RequestManagement.API/RequestManagement.API.csproj" />
   <Project Path="RequestManagement.Application/RequestManagement.Application.csproj" />
-  <Project Path="RequestManagement.Core/RequestManagement.Core.csproj" />
+  <Project Path="RequestManagement.Domain/RequestManagement.Domain.csproj" />
   <Project Path="RequestManagement.Infrastructure/RequestManagement.Infrastructure.csproj" />
 </Solution>

@@ -1,4 +1,4 @@
-using RequestManagement.Core.DTOs.Report;
+using RequestManagement.Domain.DTOs.Report;
 
 namespace RequestManagement.Application.Interfaces;
 

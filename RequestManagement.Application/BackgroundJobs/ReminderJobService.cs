@@ -1,6 +1,6 @@
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.Enums;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.Enums;
+using RequestManagement.Domain.Interfaces;
 
 namespace RequestManagement.Application.BackgroundJobs;
 

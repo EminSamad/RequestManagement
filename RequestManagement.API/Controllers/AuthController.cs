@@ -2,9 +2,9 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.DTOs.Auth;
-using RequestManagement.Core.DTOs.User;
-using RequestManagement.Core.Entities;
+using RequestManagement.Domain.DTOs.Auth;
+using RequestManagement.Domain.DTOs.User;
+using RequestManagement.Domain.Entities;
 
 namespace RequestManagement.API.Controllers;
 

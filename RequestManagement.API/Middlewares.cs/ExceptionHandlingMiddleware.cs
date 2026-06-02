@@ -1,6 +1,6 @@
 using System.Net;
 using System.Text.Json;
-using RequestManagement.Core.Exceptions;
+using RequestManagement.Domain.Exceptions;
 
 namespace RequestManagement.API.Middlewares;
 

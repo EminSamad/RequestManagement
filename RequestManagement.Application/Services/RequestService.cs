@@ -1,9 +1,9 @@
-using RequestManagement.Core.DTOs.Request;
+using RequestManagement.Domain.DTOs.Request;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.Entities;
-using RequestManagement.Core.Enums;
-using RequestManagement.Core.Exceptions;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.Entities;
+using RequestManagement.Domain.Enums;
+using RequestManagement.Domain.Exceptions;
+using RequestManagement.Domain.Interfaces;
 
 namespace RequestManagement.Application.Services;
 

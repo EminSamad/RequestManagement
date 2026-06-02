@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RequestManagement.Core\RequestManagement.Core.csproj" />
+      <ProjectReference Include="..\RequestManagement.Domain\RequestManagement.Domain.csproj" />
     </ItemGroup>
 
   </Project>

@@ -4,11 +4,11 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.DTOs.Auth;
-using RequestManagement.Core.DTOs.User;
-using RequestManagement.Core.Entities;
-using RequestManagement.Core.Interfaces;
-using RequestManagement.Core.Exceptions;
+using RequestManagement.Domain.DTOs.Auth;
+using RequestManagement.Domain.DTOs.User;
+using RequestManagement.Domain.Entities;
+using RequestManagement.Domain.Interfaces;
+using RequestManagement.Domain.Exceptions;
 
 namespace RequestManagement.Application.Services;
 

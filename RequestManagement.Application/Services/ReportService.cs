@@ -1,5 +1,5 @@
-using RequestManagement.Core.DTOs.Report;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.DTOs.Report;
+using RequestManagement.Domain.Interfaces;
 using RequestManagement.Application.Interfaces;
 
 namespace RequestManagement.Application.Services;

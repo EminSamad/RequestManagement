@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using RequestManagement.Infrastructure.Context;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.Interfaces;
 using RequestManagement.Infrastructure.Repositories.Implementations;
 using RequestManagement.Application.Interfaces;
 using RequestManagement.Application.Services;

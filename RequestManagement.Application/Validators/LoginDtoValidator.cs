@@ -1,5 +1,5 @@
 using FluentValidation;
-using RequestManagement.Core.DTOs.Auth;
+using RequestManagement.Domain.DTOs.Auth;
 
 namespace RequestManagement.Application.Validators;
 

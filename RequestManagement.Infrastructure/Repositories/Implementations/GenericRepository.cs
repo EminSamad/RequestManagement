@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RequestManagement.Infrastructure.Context;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.Interfaces;
 
 namespace RequestManagement.Infrastructure.Repositories.Implementations;
 

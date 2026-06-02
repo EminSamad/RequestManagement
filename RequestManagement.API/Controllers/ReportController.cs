@@ -2,7 +2,7 @@ using ClosedXML.Excel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.DTOs.Report;
+using RequestManagement.Domain.DTOs.Report;
 
 namespace RequestManagement.API.Controllers;
 

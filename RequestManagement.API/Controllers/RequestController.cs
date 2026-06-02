@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.DTOs.Request;
+using RequestManagement.Domain.DTOs.Request;
 using System.Security.Claims;
 using RequestManagement.API.Services;
 

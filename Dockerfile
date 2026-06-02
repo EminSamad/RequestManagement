@@ -7,7 +7,7 @@ WORKDIR /src
 COPY ["RequestManagement.API/RequestManagement.API.csproj", "RequestManagement.API/"]
 COPY ["RequestManagement.Application/RequestManagement.Application.csproj", "RequestManagement.Application/"]
 COPY ["RequestManagement.Infrastructure/RequestManagement.Infrastructure.csproj", "RequestManagement.Infrastructure/"]
-COPY ["RequestManagement.Core/RequestManagement.Core.csproj", "RequestManagement.Core/"]
+COPY ["RequestManagement.Domain/RequestManagement.Domain.csproj", "RequestManagement.Domain/"]
 RUN dotnet restore "RequestManagement.API/RequestManagement.API.csproj"
 COPY . .
 WORKDIR "/src/RequestManagement.API"

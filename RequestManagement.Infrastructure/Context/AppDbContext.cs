@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using RequestManagement.Core.Entities;
-using RequestManagement.Core.Enums;
+using RequestManagement.Domain.Entities;
+using RequestManagement.Domain.Enums;
 
 namespace RequestManagement.Infrastructure.Context;
 

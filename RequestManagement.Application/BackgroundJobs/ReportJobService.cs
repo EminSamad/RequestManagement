@@ -1,6 +1,6 @@
 using ClosedXML.Excel;
 using RequestManagement.Application.Interfaces;
-using RequestManagement.Core.Interfaces;
+using RequestManagement.Domain.Interfaces;
 
 namespace RequestManagement.Application.BackgroundJobs;
 

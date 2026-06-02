@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using RequestManagement.Core.Entities;
+using RequestManagement.Domain.Entities;
 using RequestManagement.Infrastructure.Context;
 using Microsoft.AspNetCore.Identity;
 

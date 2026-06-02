@@ -1,5 +1,5 @@
-using RequestManagement.Core.DTOs.Auth;
-using RequestManagement.Core.DTOs.User;
+using RequestManagement.Domain.DTOs.Auth;
+using RequestManagement.Domain.DTOs.User;
 
 namespace RequestManagement.Application.Interfaces;
 

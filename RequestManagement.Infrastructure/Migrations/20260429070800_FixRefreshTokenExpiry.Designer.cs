@@ -25,7 +25,7 @@ namespace RequestManagement.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Category", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -63,7 +63,7 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.RefreshToken", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,7 +112,7 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Request", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Request", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,7 +189,7 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("Requests");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Role", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -227,7 +227,7 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.User", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -273,7 +273,7 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.UserRole", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.UserRole", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -312,9 +312,9 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.RefreshToken", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("RequestManagement.Core.Entities.User", "User")
+                    b.HasOne("RequestManagement.Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -323,20 +323,20 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Request", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Request", b =>
                 {
-                    b.HasOne("RequestManagement.Core.Entities.Category", "Category")
+                    b.HasOne("RequestManagement.Domain.Entities.Category", "Category")
                         .WithMany("Requests")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RequestManagement.Core.Entities.User", "Executor")
+                    b.HasOne("RequestManagement.Domain.Entities.User", "Executor")
                         .WithMany()
                         .HasForeignKey("ExecutorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("RequestManagement.Core.Entities.User", "Requester")
+                    b.HasOne("RequestManagement.Domain.Entities.User", "Requester")
                         .WithMany("CreatedRequests")
                         .HasForeignKey("RequesterId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -349,15 +349,15 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.Navigation("Requester");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.UserRole", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("RequestManagement.Core.Entities.Role", "Role")
+                    b.HasOne("RequestManagement.Domain.Entities.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RequestManagement.Core.Entities.User", "User")
+                    b.HasOne("RequestManagement.Domain.Entities.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -368,17 +368,17 @@ namespace RequestManagement.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Category", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Requests");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.Role", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("RequestManagement.Core.Entities.User", b =>
+            modelBuilder.Entity("RequestManagement.Domain.Entities.User", b =>
                 {
                     b.Navigation("CreatedRequests");
 
