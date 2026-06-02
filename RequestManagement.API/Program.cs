@@ -18,7 +18,8 @@ using Hangfire.PostgreSql;
 using RequestManagement.Application.BackgroundJobs;
 using RequestManagement.API.Filters;
 using RequestManagement.API.Hubs;
-using RequestManagement.Infrastructure.Seed; // <-- IMPORTANT
+using RequestManagement.Infrastructure.Seed;
+using FastEndpoints; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,6 +49,8 @@ builder.Services.AddControllers()
             return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(new { errors });
         };
     });
+
+builder.Services.AddFastEndpoints();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
@@ -164,7 +167,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseFastEndpoints();
 app.MapHub<NotificationHub>("/hubs/notifications");
 
 // Recurring jobs

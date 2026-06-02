@@ -1,40 +1,28 @@
 using ClosedXML.Excel;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+using FastEndpoints;
 using RequestManagement.Application.Interfaces;
 using RequestManagement.Domain.DTOs.Report;
 
-namespace RequestManagement.API.Controllers;
+namespace RequestManagement.API.Endpoints.Report;
 
-[ApiController]
-[Route("api/[controller]")]
-[Authorize(Roles = "Admin")]
-public class ReportController : ControllerBase
+public class ExportToExcelEndpoint : Endpoint<ReportFilterDto>
 {
     private readonly IReportService _reportService;
-    private readonly ILogger<ReportController> _logger;
 
-    public ReportController(IReportService reportService, ILogger<ReportController> logger)
+    public ExportToExcelEndpoint(IReportService reportService)
     {
         _reportService = reportService;
-        _logger = logger;
     }
 
-    [HttpGet("filter")]
-    public async Task<IActionResult> GetFilteredReport([FromQuery] ReportFilterDto filter)
+    public override void Configure()
     {
-        _logger.LogInformation("Admin fetching filtered report");
-        var report = await _reportService.GetFilteredReportAsync(filter);
-        _logger.LogInformation("Filtered report fetched successfully with {Count} records", report.Count());
-        return Ok(report);
+        Get("/api/report/export-excel");
+        Roles("Admin");
     }
-    
 
-    [HttpGet("export-excel")]
-    public async Task<IActionResult> ExportToExcel([FromQuery] ReportFilterDto filter)
+    public override async Task HandleAsync(ReportFilterDto req, CancellationToken ct)
     {
-        _logger.LogInformation("Admin exporting filtered report to Excel");
-        var report = await _reportService.GetFilteredReportAsync(filter);
+        var report = await _reportService.GetFilteredReportAsync(req);
 
         using var workbook = new XLWorkbook();
         var worksheet = workbook.Worksheets.Add("Report");
@@ -72,9 +60,8 @@ public class ReportController : ControllerBase
         workbook.SaveAs(stream);
         stream.Position = 0;
 
-        _logger.LogInformation("Report exported to Excel successfully");
-        return File(stream.ToArray(),
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "report.xlsx");
+        HttpContext.Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        HttpContext.Response.Headers.Append("Content-Disposition", "attachment; filename=report.xlsx");
+        await HttpContext.Response.Body.WriteAsync(stream.ToArray(), ct);
     }
 }
