@@ -1,6 +1,8 @@
 using FastEndpoints;
 using RequestManagement.Application.Interfaces;
 using RequestManagement.Domain.DTOs.Request;
+using RequestManagement.Domain.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace RequestManagement.API.Endpoints.Request;
 

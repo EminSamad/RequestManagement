@@ -19,7 +19,8 @@ using RequestManagement.Application.BackgroundJobs;
 using RequestManagement.API.Filters;
 using RequestManagement.API.Hubs;
 using RequestManagement.Infrastructure.Seed;
-using FastEndpoints; 
+using FastEndpoints;
+using FastEndpoints.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,57 +34,26 @@ builder.Logging.AddFile(options =>
     };
 });
 
-// Controllers + Validation
-builder.Services.AddControllers()
-    .ConfigureApiBehaviorOptions(options =>
-    {
-        options.InvalidModelStateResponseFactory = context =>
-        {
-            var errors = context.ModelState
-                .Where(e => e.Value!.Errors.Count > 0)
-                .ToDictionary(
-                    e => e.Key,
-                    e => e.Value!.Errors.Select(x => x.ErrorMessage).ToArray()
-                );
+builder.Services.AddFastEndpoints()
+                .SwaggerDocument(o =>
+                {
+                    o.DocumentSettings = s =>
+                    {
+                        s.AddAuth("Bearer", new()
+                        {
+                            Name = "Authorization",
+                            In = NSwag.OpenApiSecurityApiKeyLocation.Header,
+                            Type = NSwag.OpenApiSecuritySchemeType.Http,
+                            Scheme = "Bearer",
+                            BearerFormat = "JWT"
+                        });
+                    };
+                });
 
-            return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(new { errors });
-        };
-    });
-
-builder.Services.AddFastEndpoints();
+builder.Services.AddControllers();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<RegisterDtoValidator>();
-
-builder.Services.AddEndpointsApiExplorer();
-
-// Swagger JWT
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header
-    });
-
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
-    {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            Array.Empty<string>()
-        }
-    });
-});
 
 // Hangfire
 builder.Services.AddHangfire(config =>
@@ -137,10 +107,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
@@ -148,16 +116,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 var app = builder.Build();
 
-// Dev tools
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerGen();
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
-app.UseHttpsRedirection();
 
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
@@ -181,11 +145,10 @@ RecurringJob.AddOrUpdate<ReminderJobService>(
     x => x.SendReminder(),
     "0 9 * * *");
 
-// DATABASE MIGRATION + SEEDER (FIX HERE)
+// DATABASE MIGRATION + SEEDER
 await using (var scope = app.Services.CreateAsyncScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
     await db.Database.MigrateAsync();
     await DbSeeder.SeedAsync(db);
 }

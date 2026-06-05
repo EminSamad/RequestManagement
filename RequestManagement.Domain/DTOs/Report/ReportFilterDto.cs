@@ -1,15 +1,16 @@
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace RequestManagement.Domain.DTOs.Report;
 
 public class ReportFilterDto
 {
-    public string? SearchText { get; set; }
-    public int? CategoryId { get; set; }
-    public string? Priority { get; set; }
-    public string? Status { get; set; }
-    public DateTime? StartDate { get; set; }
-    public DateTime? EndDate { get; set; }
+    [FromQuery] public string? SearchText { get; set; }
+    [FromQuery] public int? CategoryId { get; set; }
+    [FromQuery] public string? Priority { get; set; }
+    [FromQuery] public string? Status { get; set; }
+    [FromQuery] public DateTime? StartDate { get; set; }
+    [FromQuery] public DateTime? EndDate { get; set; }
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

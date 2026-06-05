@@ -294,21 +294,21 @@ public class RequestService : IRequestService
 
         query = filter.OrderBy?.ToLower() switch
         {
-            "date" => filter.OrderByAsc
+            "date" => filter.OrderByAsc ?? false
                 ? query.OrderBy(r => r.DueDate)
                 : query.OrderByDescending(r => r.DueDate),
-            "status" => filter.OrderByAsc
+            "status" => filter.OrderByAsc ?? false
                 ? query.OrderBy(r => r.Status)
                 : query.OrderByDescending(r => r.Status),
-            "priority" => filter.OrderByAsc
+            "priority" => filter.OrderByAsc ?? false
                 ? query.OrderBy(r => r.Priority)
                 : query.OrderByDescending(r => r.Priority),
             _ => query.OrderByDescending(r => r.DueDate)
         };
 
         query = query
-            .Skip((filter.PageNumber - 1) * filter.PageSize)
-            .Take(filter.PageSize);
+            .Skip(((filter.PageNumber ?? 1) - 1) * (filter.PageSize ?? 10))
+            .Take(filter.PageSize ?? 10);
 
         return query.Select(r => new RequestDto
         {
